@@ -248,11 +248,13 @@ a:hover {
   line-height: 1.05;
 }
 
-/* Только в шапке: центр по полосе (не трогать .footer .logo) */
+/* Только в шапке: центр по горизонтали; вертикаль — первая строка (иначе при открытом меню
+   логотип «центрируется» во всей высоте шапки и перекрывает пункты слева) */
 .header__inner .logo {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
+  top: calc(1rem + 24px);
+  transform: translate(-50%, -50%);
   z-index: 1;
 }
 
@@ -1745,11 +1747,14 @@ section[id] {
     flex-wrap: wrap;
     justify-content: flex-end;
     align-items: center;
+    position: relative;
+    z-index: 15;
   }
 
   .header-menu__panel.nav {
     display: none;
-    position: static;
+    position: relative;
+    z-index: 15;
     opacity: 1;
     visibility: visible;
     transform: none;
@@ -1763,7 +1768,7 @@ section[id] {
     border: none;
     border-top: 1px solid var(--border);
     border-radius: 0;
-    background: transparent;
+    background: rgba(255, 251, 247, 0.98);
     box-shadow: none;
   }
 
@@ -1772,7 +1777,7 @@ section[id] {
   }
 
   .header-menu__panel.nav a:not(.nav__btn) {
-    padding: 0.65rem 0.5rem;
+    padding: 0.65rem 1rem;
     min-height: 44px;
     display: flex;
     align-items: center;
