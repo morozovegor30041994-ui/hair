@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Кабинет администратора — Velvet Hair</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+  <div id="login-screen" class="admin-login">
+    <form id="login-form" novalidate>
+      <p class="admin-login__brand">Velvet Hair</p>
+      <h1 class="admin-login__title">Вход для администратора</h1>
+      <label for="admin-password">Пароль</label>
+      <input type="password" id="admin-password" name="password" autocomplete="current-password" required>
+      <label class="admin-show-password">
+        <input type="checkbox" id="admin-password-toggle" aria-controls="admin-password">
+        Показать пароль
+      </label>
+      <button type="submit">Войти</button>
+      <p class="admin-error" id="login-error" hidden>Неверный пароль</p>
+      <p class="admin-login__back"><a href="index.html">← На сайт</a> · <a href="cabinet.html">Кабинет клиента</a></p>
+    </form>
+  </div>
+
+  <div id="dashboard" class="admin-dashboard" hidden>
+    <header class="header">
+      <div class="container admin-dashboard__top">
+        <h1>Заявки на консультацию</h1>
+        <div class="admin-dashboard__actions">
+          <button type="button" class="admin-btn" id="export-csv">Выгрузить CSV</button>
+          <button type="button" class="admin-btn admin-btn--danger" id="clear-all">Очистить все</button>
+          <button type="button" class="admin-btn" id="logout-btn">Выйти</button>
+        </div>
+      </div>
+    </header>
+    <main class="container">
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th scope="col">Получено</th>
+              <th scope="col">Имя</th>
+              <th scope="col">Телефон</th>
+              <th scope="col">Дата визита</th>
+              <th scope="col">Время</th>
+              <th scope="col">Мастер</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody id="bookings-tbody"></tbody>
+        </table>
+      </div>
+      <p class="admin-empty" id="empty-state" hidden>Пока нет заявок. Они появятся здесь после отправки формы на главной странице сайта.</p>
+      <p class="admin-note">
+        Заявки хранятся в браузере этого компьютера (localStorage). Чтобы видеть заявки от клиентов с других устройств, нужен сервер или облачная база. Пароль задайте в файле <code>js/admin.js</code> (константа <code>ADMIN_PASSWORD</code>).
+      </p>
+    </main>
+  </div>
+
+  <script src="js/bookings-store.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

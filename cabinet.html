@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Личный кабинет — Velvet Hair</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/cabinet.css">
+</head>
+<body class="cabinet-body">
+  <div id="cabinet-auth" class="cabinet-auth">
+    <p class="cabinet-auth__brand">Velvet Hair</p>
+    <h1 class="cabinet-auth__title">Личный кабинет</h1>
+    <p class="cabinet-auth__lead">Введите номер телефона, который указывали при записи. Мы отправим код в СМС — после ввода кода откроется кабинет.</p>
+    <form id="cabinet-login-form" novalidate>
+      <div id="cabinet-step-phone">
+        <label for="cabinet-phone">Телефон</label>
+        <input type="tel" id="cabinet-phone" name="phone" autocomplete="tel" placeholder="+7 (901) 123-45-67" required>
+        <p class="cabinet-auth__error" id="cabinet-login-error" hidden></p>
+        <button type="button" class="cabinet-auth__submit" id="cabinet-send-code">Получить код</button>
+      </div>
+      <div id="cabinet-step-otp" class="cabinet-step-otp" hidden>
+        <p class="cabinet-auth__otp-lead" id="cabinet-otp-lead">Код отправлен на номер <strong id="cabinet-phone-mask"></strong></p>
+        <label for="cabinet-code">Код из СМС</label>
+        <input type="text" id="cabinet-code" name="code" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" autocomplete="one-time-code" placeholder="000000">
+        <p class="cabinet-auth__error" id="cabinet-otp-error" hidden></p>
+        <button type="button" class="cabinet-auth__submit" id="cabinet-verify-btn">Войти</button>
+        <div class="cabinet-auth__otp-actions">
+          <button type="button" class="cabinet-auth__secondary" id="cabinet-resend" disabled>Отправить код повторно</button>
+          <button type="button" class="cabinet-auth__text-btn" id="cabinet-back-phone">Изменить номер</button>
+        </div>
+      </div>
+      <div class="cabinet-auth__demo" id="cabinet-otp-demo" hidden>
+        <p class="cabinet-auth__demo-title">Демо-режим</p>
+        <p class="cabinet-auth__demo-text">Без сервера СМС не отправляются. Код для входа:</p>
+        <p class="cabinet-auth__demo-code" id="cabinet-demo-code" aria-live="polite"></p>
+      </div>
+    </form>
+    <p class="cabinet-auth__links">
+      <a href="index.html">← На главную</a>
+      ·
+      <a href="admin.html">Кабинет администратора</a>
+    </p>
+  </div>
+
+  <div id="cabinet-dash" class="cabinet-dash" hidden>
+    <header class="header">
+      <div class="container cabinet-dash__top">
+        <div>
+          <h1 id="cabinet-user-name">Клиент</h1>
+          <p class="cabinet-dash__meta" id="cabinet-user-phone"></p>
+        </div>
+        <div class="cabinet-dash__actions">
+          <a href="index.html" class="admin-btn">На сайт</a>
+          <button type="button" class="admin-btn" id="cabinet-logout">Выйти</button>
+        </div>
+      </div>
+    </header>
+    <main class="container">
+      <section class="cabinet-section" aria-labelledby="upcoming-title">
+        <h2 class="cabinet-section__title" id="upcoming-title">Предстоящая запись</h2>
+        <div class="cabinet-cards" id="cabinet-upcoming"></div>
+      </section>
+      <section class="cabinet-section" aria-labelledby="past-title">
+        <h2 class="cabinet-section__title" id="past-title">Прошедшие процедуры</h2>
+        <div class="cabinet-cards" id="cabinet-past"></div>
+      </section>
+      <p class="cabinet-note">
+        Данные хранятся в браузере этого устройства. После даты визита запись переносится в историю автоматически. Для полного учёта на всех устройствах нужен сервер или приложение салона.
+        Вход в кабинет защищён кодом из СМС; без сервера отправки СМС код в демо-режиме показывается на экране входа.
+      </p>
+    </main>
+  </div>
+
+  <script src="js/client-store.js"></script>
+  <script src="js/cabinet.js"></script>
+</body>
+</html>
