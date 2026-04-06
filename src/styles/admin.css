@@ -223,8 +223,53 @@
 }
 
 @media (max-width: 640px) {
+  .admin-login {
+    margin: 2rem clamp(0.5rem, 3vw, 1rem);
+    padding: clamp(1.25rem, 4vw, 1.5rem);
+  }
+
+  .admin-dashboard__top h1 {
+    width: 100%;
+  }
+
+  .admin-dashboard__actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .admin-dashboard__actions .admin-btn {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 48px;
+  }
+
+  .admin-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    margin-inline: calc(-1 * clamp(0.25rem, 2vw, 0.75rem));
+    padding-bottom: 0.35rem;
+  }
+
+  .admin-table {
+    min-width: 620px;
+    font-size: 0.78rem;
+  }
+
   .admin-table th:nth-child(4),
   .admin-table td:nth-child(4) {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-login #admin-password {
+    font-size: 16px;
+    min-height: 48px;
+  }
+
+  .admin-login button[type="submit"] {
+    min-height: 48px;
   }
 }

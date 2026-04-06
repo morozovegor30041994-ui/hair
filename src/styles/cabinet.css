@@ -298,3 +298,59 @@
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);
 }
+
+@media (max-width: 640px) {
+  .cabinet-auth {
+    margin: clamp(1.5rem, 5vw, 2.5rem) clamp(0.5rem, 3vw, 1rem);
+    padding: clamp(1.25rem, 4vw, 1.75rem);
+  }
+
+  .cabinet-dash__top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cabinet-dash__actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cabinet-dash__actions .admin-btn {
+    width: 100%;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .cabinet-card {
+    padding: 1rem 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cabinet-auth input[type="tel"],
+  .cabinet-auth input[type="text"] {
+    font-size: 16px;
+    min-height: 48px;
+  }
+
+  .cabinet-auth__submit,
+  .cabinet-auth__secondary {
+    min-height: 48px;
+  }
+
+  .cabinet-auth__demo-code {
+    font-size: 1.45rem;
+    letter-spacing: 0.12em;
+    word-break: break-all;
+  }
+
+  .cabinet-note {
+    font-size: 0.78rem;
+    padding: 0.85rem;
+  }
+}

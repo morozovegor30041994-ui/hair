@@ -104,8 +104,6 @@
   var successEl = document.getElementById("booking-form-success");
   var masterHint = document.getElementById("master-hint");
   var masterCards = document.querySelectorAll(".master-card[data-master]");
-  var scheduleBody = document.getElementById("schedule-table-body");
-
   function updateMastersForDate() {
     var ymd = dateInput ? dateInput.value : "";
     var working = ymd ? getWorkingIdsForDate(ymd) : [];
@@ -338,45 +336,6 @@
     }
   }
 
-  function fillScheduleTable() {
-    if (!scheduleBody) return;
-    scheduleBody.textContent = "";
-    var today = todayLocalYmd();
-    var start = parseYmdLocal(today);
-    if (!start) return;
-
-    for (var i = 0; i < 14; i++) {
-      var d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
-      var y = d.getFullYear();
-      var m = String(d.getMonth() + 1);
-      if (m.length < 2) m = "0" + m;
-      var day = String(d.getDate());
-      if (day.length < 2) day = "0" + day;
-      var ymd = y + "-" + m + "-" + day;
-
-      var tr = document.createElement("tr");
-      var tdDate = document.createElement("td");
-      var tdNames = document.createElement("td");
-
-      var pretty = d.toLocaleDateString("ru-RU", {
-        weekday: "short",
-        day: "numeric",
-        month: "short",
-      });
-      tdDate.textContent = pretty;
-      if (ymd === today) {
-        tdDate.classList.add("schedule-day--today");
-        tdDate.textContent += " · сегодня";
-      }
-
-      tdNames.textContent = getShiftLabelForDate(ymd);
-
-      tr.appendChild(tdDate);
-      tr.appendChild(tdNames);
-      scheduleBody.appendChild(tr);
-    }
-  }
-
   if (dateInput) {
     dateInput.min = todayLocalYmd();
     dateInput.addEventListener("change", function () {
@@ -390,7 +349,6 @@
     });
   }
 
-  fillScheduleTable();
   updateMastersForDate();
   renderTimeSlots();
 
