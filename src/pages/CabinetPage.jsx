@@ -227,7 +227,7 @@ export default function CabinetPage() {
   }
 
   return (
-    <div id="cabinet-auth" className="cabinet-auth cabinet-body">
+    <main id="main-content" className="cabinet-auth cabinet-body">
       <p className="cabinet-auth__brand">Velvet Hair</p>
       <h1 className="cabinet-auth__title">Личный кабинет</h1>
       <p className="cabinet-auth__lead">
@@ -323,7 +323,7 @@ export default function CabinetPage() {
       <p className="cabinet-auth__links">
         <Link to="/">← На главную</Link> · <Link to="/lk">ЛК</Link>
       </p>
-    </div>
+    </main>
   );
 }
 
@@ -345,9 +345,9 @@ function CabinetDashboard({ phoneKey, onLogout }) {
 
   if (!profile) {
     return (
-      <div className="cabinet-body" style={{ padding: "3rem", textAlign: "center" }}>
+      <main id="main-content" className="cabinet-body" style={{ padding: "3rem", textAlign: "center" }}>
         Загрузка…
-      </div>
+      </main>
     );
   }
 
@@ -385,7 +385,7 @@ function CabinetDashboard({ phoneKey, onLogout }) {
           </div>
         </div>
       </header>
-      <main className="container">
+      <main id="main-content" className="container">
         <section className="cabinet-section" aria-labelledby="upcoming-title">
           <h2 className="cabinet-section__title" id="upcoming-title">
             Предстоящая запись

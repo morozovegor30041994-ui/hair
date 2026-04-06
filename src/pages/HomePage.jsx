@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <main>
+      <main id="main-content">
         <section className="hero">
           <div className="container hero__grid">
             <div className="hero__content">

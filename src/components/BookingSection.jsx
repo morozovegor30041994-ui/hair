@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useBookings } from "../hooks/useBookings";
 import * as clientStore from "../lib/clientStore";
 import BookingDatePicker from "./BookingDatePicker";
@@ -30,13 +30,38 @@ export default function BookingSection() {
   const [timeHm, setTimeHm] = useState("");
   const [masterId, setMasterId] = useState("");
   const [success, setSuccess] = useState(false);
+  const [formError, setFormError] = useState("");
+
+  const formErrorRef = useRef(null);
+  const successRef = useRef(null);
 
   const minDate = todayLocalYmd();
+
+  function clearFormMessages() {
+    setSuccess(false);
+    setFormError("");
+  }
 
   useEffect(() => {
     setTimeHm("");
     setMasterId("");
   }, [dateYmd]);
+
+  useEffect(() => {
+    if (!formError) return;
+    const el = formErrorRef.current;
+    if (!el) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" });
+  }, [formError]);
+
+  useEffect(() => {
+    if (!success) return;
+    const el = successRef.current;
+    if (!el) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" });
+  }, [success]);
 
   const workingIds = dateYmd ? getWorkingIdsForDate(dateYmd) : [];
 
@@ -75,36 +100,45 @@ export default function BookingSection() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    setSuccess(false);
+    clearFormMessages();
 
+    const nameTrim = name.trim();
+    if (nameTrim.length < 2) {
+      setFormError("Укажите имя не короче 2 букв.");
+      return;
+    }
+    if (!phone.trim()) {
+      setFormError("Укажите номер телефона.");
+      return;
+    }
     if (!dateYmd) {
-      alert("Выберите дату.");
+      setFormError("Выберите дату визита.");
       return;
     }
     const working = getWorkingIdsForDate(dateYmd);
     if (!masterId || working.indexOf(masterId) === -1) {
-      alert("Выберите мастера из числа работающих в выбранную дату.");
+      setFormError("Выберите мастера из числа работающих в выбранную дату.");
       return;
     }
     if (!timeHm) {
-      alert("Выберите время визита.");
+      setFormError("Выберите время визита из доступных слотов.");
       return;
     }
     const eff = getEffectiveMinVisitHm(dateYmd);
     if (eff > "21:00") {
-      alert("На выбранную дату нет доступных слотов. Укажите другую дату.");
+      setFormError("На выбранную дату нет доступных слотов. Укажите другую дату.");
       return;
     }
     if (timeHm < eff || timeHm > "21:00") {
-      alert("Время визита должно быть с 10:00 до 21:00 (шаг 30 минут).");
+      setFormError("Время визита должно быть с 10:00 до 21:00 (шаг 30 минут).");
       return;
     }
     if (!isOnVisitSlotGrid(timeHm)) {
-      alert("Выберите время с шагом 30 минут.");
+      setFormError("Выберите время с шагом 30 минут.");
       return;
     }
     if (isSlotBookedOrBlocked(dateYmd, timeHm, bookings)) {
-      alert(
+      setFormError(
         "Это время уже занято или пересекается с другой записью (ближайшие 4 часа). Выберите другой слот."
       );
       return;
@@ -114,15 +148,15 @@ export default function BookingSection() {
     let row;
     try {
       row = add({
-        name,
-        phone,
+        name: nameTrim,
+        phone: phone.trim(),
         dateYmd,
         timeHm,
         masterId,
         masterName,
       });
     } catch {
-      alert("Ошибка сохранения заявки.");
+      setFormError("Не удалось сохранить заявку. Попробуйте ещё раз.");
       return;
     }
 
@@ -152,6 +186,11 @@ export default function BookingSection() {
         </h2>
 
         <form className="booking-form" onSubmit={handleSubmit} noValidate>
+          {formError ? (
+            <p ref={formErrorRef} className="booking-form__error" role="alert">
+              {formError}
+            </p>
+          ) : null}
           <div className="booking-form__fields">
             <label className="form-field">
               <span className="form-field__label">Имя</span>
@@ -165,7 +204,7 @@ export default function BookingSection() {
                 minLength={2}
                 value={name}
                 onChange={(e) => {
-                  setSuccess(false);
+                  clearFormMessages();
                   setName(e.target.value);
                 }}
               />
@@ -182,7 +221,7 @@ export default function BookingSection() {
                 required
                 value={phone}
                 onChange={(e) => {
-                  setSuccess(false);
+                  clearFormMessages();
                   setPhone(e.target.value);
                 }}
               />
@@ -196,7 +235,7 @@ export default function BookingSection() {
                 minYmd={minDate}
                 labelledBy="booking-date-label"
                 onChange={(ymd) => {
-                  setSuccess(false);
+                  clearFormMessages();
                   setDateYmd(ymd);
                 }}
               />
@@ -230,7 +269,7 @@ export default function BookingSection() {
                       }
                       onClick={() => {
                         if (!disabled) {
-                          setSuccess(false);
+                          clearFormMessages();
                           setTimeHm(slotHm);
                         }
                       }}
@@ -266,7 +305,7 @@ export default function BookingSection() {
                           checked={masterId === id}
                           disabled={disabled}
                           onChange={() => {
-                            setSuccess(false);
+                            clearFormMessages();
                             setMasterId(id);
                           }}
                         />
@@ -287,13 +326,13 @@ export default function BookingSection() {
           <p className="booking-form__hint">
             Заявка сохраняется и передаётся администратору салона. Мы свяжемся с вами для подтверждения даты и времени.
           </p>
-          {success && (
-            <p className="booking-form__success" role="status">
+          {success ? (
+            <p ref={successRef} className="booking-form__success" role="status" aria-live="polite">
               <span className="booking-form__success-text">
                 Заявка принята. Мы свяжемся с вами для подтверждения даты и времени.
               </span>
             </p>
-          )}
+          ) : null}
         </form>
       </div>
     </section>

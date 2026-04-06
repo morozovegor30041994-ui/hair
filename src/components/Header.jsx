@@ -26,6 +26,17 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    const mq = window.matchMedia("(max-width: 640px)");
+    if (!mq.matches) return undefined;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
   function anchorNav(e, id) {
     e.preventDefault();
     smoothScrollToId(id);

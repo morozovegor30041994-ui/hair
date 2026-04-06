@@ -102,7 +102,7 @@ export default function AdminPage() {
 
   if (!loggedIn) {
     return (
-      <div id="login-screen" className="admin-login admin-body">
+      <main id="main-content" className="admin-login admin-body">
         <form id="login-form" noValidate onSubmit={handleLogin}>
           <p className="admin-login__brand">Velvet Hair</p>
           <h1 className="admin-login__title">Вход для администратора</h1>
@@ -131,7 +131,7 @@ export default function AdminPage() {
             <Link to="/">← На сайт</Link> · <Link to="/lk">ЛК</Link>
           </p>
         </form>
-      </div>
+      </main>
     );
   }
 
@@ -153,7 +153,7 @@ export default function AdminPage() {
           </div>
         </div>
       </header>
-      <main className="container">
+      <main id="main-content" className="container">
         <div className="admin-table-wrap">
           <table className="admin-table">
             <thead>
