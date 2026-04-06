@@ -23,7 +23,7 @@ const MASTER_ORDER = [
 ];
 
 export default function BookingSection() {
-  const { list: bookings, add } = useBookings();
+  const { list: bookings, add, cloudEnabled } = useBookings();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [dateYmd, setDateYmd] = useState("");
@@ -98,7 +98,7 @@ export default function BookingSection() {
     return { hint, slots: buttons, hasFree, showGrid: true };
   }, [dateYmd, bookings]);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     clearFormMessages();
 
@@ -147,7 +147,7 @@ export default function BookingSection() {
     const masterName = MASTERS[masterId] || masterId;
     let row;
     try {
-      row = add({
+      row = await add({
         name: nameTrim,
         phone: phone.trim(),
         dateYmd,
@@ -324,7 +324,9 @@ export default function BookingSection() {
             Отправить заявку
           </button>
           <p className="booking-form__hint">
-            Заявка сохраняется и передаётся администратору салона. Мы свяжемся с вами для подтверждения даты и времени.
+            {cloudEnabled
+              ? "Заявка сохраняется в облачной базе и доступна администратору с любого устройства. Мы свяжемся с вами для подтверждения даты и времени."
+              : "Заявка сохраняется и передаётся администратору салона. Мы свяжемся с вами для подтверждения даты и времени."}
           </p>
           {success ? (
             <p ref={successRef} className="booking-form__success" role="status" aria-live="polite">

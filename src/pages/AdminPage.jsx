@@ -38,7 +38,7 @@ function todayYmd() {
 }
 
 export default function AdminPage() {
-  const { list, remove, clearAll } = useBookings();
+  const { list, remove, clearAll, loading, loadError, cloudEnabled } = useBookings();
   const [loggedIn, setLoggedIn] = useState(
     () => sessionStorage.getItem(SESSION_KEY) === "1"
   );
@@ -86,17 +86,24 @@ export default function AdminPage() {
     URL.revokeObjectURL(a.href);
   }
 
-  function handleDelete(id) {
-    if (confirm("Удалить эту заявку?")) remove(id);
+  async function handleDelete(id) {
+    if (!confirm("Удалить эту заявку?")) return;
+    try {
+      await remove(id);
+    } catch {
+      alert("Не удалось удалить заявку. Проверьте соединение и настройки базы.");
+    }
   }
 
-  function handleClearAll() {
-    if (
-      confirm(
-        "Удалить все заявки из хранилища браузера? Это действие нельзя отменить."
-      )
-    ) {
-      clearAll();
+  async function handleClearAll() {
+    const msg = cloudEnabled
+      ? "Удалить все заявки в облачной базе? Это действие нельзя отменить."
+      : "Удалить все заявки из хранилища браузера? Это действие нельзя отменить.";
+    if (!confirm(msg)) return;
+    try {
+      await clearAll();
+    } catch {
+      alert("Не удалось очистить список. Проверьте соединение и настройки базы.");
     }
   }
 
@@ -154,6 +161,16 @@ export default function AdminPage() {
         </div>
       </header>
       <main id="main-content" className="container">
+        {loading ? (
+          <p className="admin-note" role="status">
+            Загрузка заявок…
+          </p>
+        ) : null}
+        {loadError ? (
+          <p className="admin-error" role="alert">
+            {loadError}
+          </p>
+        ) : null}
         <div className="admin-table-wrap">
           <table className="admin-table">
             <thead>
@@ -192,8 +209,19 @@ export default function AdminPage() {
           </p>
         )}
         <p className="admin-note">
-          Заявки хранятся в браузере этого компьютера (localStorage). Чтобы видеть заявки от клиентов с других устройств, нужен сервер или облачная база. Пароль задайте в файле{" "}
-          <code>src/config.js</code> (константа <code>ADMIN_PASSWORD</code>).
+          {cloudEnabled ? (
+            <>
+              Заявки сохраняются в облачной базе Supabase (общий список для всех устройств). Скрипт таблицы и политик:{" "}
+              <code>supabase/bookings.sql</code>. Переменные <code>VITE_SUPABASE_URL</code> и{" "}
+              <code>VITE_SUPABASE_ANON_KEY</code> — в файле <code>.env</code> (см. <code>env.example</code>).
+            </>
+          ) : (
+            <>
+              Заявки хранятся в браузере этого компьютера (localStorage). Для общего списка с других устройств задайте
+              Supabase в <code>.env</code> по образцу <code>env.example</code> и выполните <code>supabase/bookings.sql</code>.
+            </>
+          )}{" "}
+          Пароль админки — в <code>src/config.js</code> (<code>ADMIN_PASSWORD</code>).
         </p>
       </main>
     </div>
