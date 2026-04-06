@@ -238,10 +238,6 @@ a:hover {
 }
 
 .logo {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
   font-family: var(--font-logo);
   font-size: clamp(2.15rem, 5.8vw, 3rem);
   font-weight: 400;
@@ -250,6 +246,14 @@ a:hover {
   text-decoration: none;
   white-space: nowrap;
   line-height: 1.05;
+}
+
+/* Только в шапке: центр по полосе (не трогать .footer .logo) */
+.header__inner .logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
 }
 
 .logo:hover {
@@ -1878,7 +1882,7 @@ section[id] {
     word-break: break-word;
   }
 
-  .logo {
+  .header__inner .logo {
     font-size: clamp(1.85rem, 8vw, 2.35rem);
   }
 }
